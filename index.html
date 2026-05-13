@@ -1,22 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="manifest" href="./manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello World Webpage</title>
+    <title>Hello World App</title>
+    <!--
+        CSS Styles:
+        - Modern font stack for a clean look.
+        - Flexbox for perfect centering of content on the screen.
+        - Pleasant color palette for background, text, and button.
+        - Smooth transitions for button interactions and text changes.
+    -->
+    <style>
+        /* Global styles for a clean slate and modern typography */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%; /* Ensure the body takes full viewport height for centering */
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Modern sans-serif font stack */
+            background-color: #f8f9fa; /* Light grey background for a clean feel */
+            color: #343a40; /* Dark grey for general text */
+            display: flex; /* Use flexbox to center content */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            text-align: center; /* Ensures text inside centered container is also centered */
+            overflow: hidden; /* Prevent scrollbars if content slightly exceeds viewport */
+        }
+
+        /* Container for the "Hello World" text and button */
+        .container {
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            gap: 25px; /* Space between the greeting text and the button */
+            align-items: center; /* Center items horizontally within the container */
+            padding: 40px;
+            background-color: #ffffff; /* White background for the content area */
+            border-radius: 12px; /* Slightly rounded corners */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); /* Subtle, elegant shadow */
+            transition: transform 0.3s ease-in-out; /* Smooth transition for potential hover/active states on container */
+        }
+
+        /* Styling for the main greeting text */
+        .greeting-text {
+            font-size: 3.5em; /* Large and prominent text */
+            font-weight: 700; /* Bold text for impact */
+            margin: 0; /* Remove default h1 margin */
+            color: #007bff; /* A pleasant blue for the initial text */
+            /* Transitions for smooth changes in color and scale when text changes */
+            transition: color 0.6s ease-in-out, transform 0.6s ease-in-out;
+            will-change: color, transform; /* Optimize for animation performance */
+        }
+
+        /* Style for the greeting text AFTER it has been changed */
+        .greeting-text.text-changed {
+            color: #6f42c1; /* A pleasant purple for the changed text */
+            transform: scale(1.05); /* Slightly enlarge the text for emphasis */
+        }
+
+        /* Styling for the action button */
+        .action-button {
+            padding: 14px 30px; /* Generous padding for a comfortable click area */
+            font-size: 1.2em; /* Readable button text size */
+            font-weight: 600; /* Semi-bold button text */
+            background-color: #28a745; /* Vibrant green button color */
+            color: white; /* White text on button */
+            border: none; /* No default button border */
+            border-radius: 8px; /* Rounded button corners */
+            cursor: pointer; /* Indicate it's clickable */
+            /* Smooth transitions for hover effects */
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            outline: none; /* Remove focus outline for a cleaner look */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+
+        /* Hover effect for the button */
+        .action-button:hover {
+            background-color: #218838; /* Slightly darker green on hover */
+            transform: translateY(-3px); /* Lift the button slightly */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Enhance shadow on hover */
+        }
+
+        /* Active (click) effect for the button */
+        .action-button:active {
+            background-color: #1e7e34; /* Even darker green on click */
+            transform: translateY(0); /* "Press" the button down */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Reduce shadow to mimic being pressed */
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <p>This is a simple HTML page.</p>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('./sw.js')
-          .then(function (reg) { console.log('[PWA] SW registered:', reg.scope); })
-          .catch(function (err) { console.warn('[PWA] SW registration failed:', err); });
-      });
-    }
-  </script>
+    <!--
+        Main content container:
+        Holds the greeting text and the button.
+        Centered on the screen via body's flexbox properties.
+    -->
+    <div class="container">
+        <!--
+            Greeting text element:
+            - Displays "Hello, World!" initially.
+            - Has an ID for easy JavaScript access.
+            - Has a class for styling.
+        -->
+        <h1 id="greetingText" class="greeting-text">Hello, World!</h1>
+
+        <!--
+            Action button:
+            - Labeled "Click Me".
+            - Has an ID for easy JavaScript access.
+            - Will trigger the text change when clicked.
+        -->
+        <button id="changeTextBtn" class="action-button">Click Me</button>
+    </div>
+
+    <!--
+        JavaScript Section:
+        - Placed at the end of the body to ensure DOM elements are loaded before script execution.
+        - Uses 'DOMContentLoaded' to safely access elements.
+        - Handles the button click event to change the text and apply dynamic styling.
+    -->
+    <script>
+        // Ensure the DOM is fully loaded before running the script
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get references to the HTML elements using their IDs
+            const greetingTextElement = document.getElementById('greetingText');
+            const changeTextButton = document.getElementById('changeTextBtn');
+
+            // Add an event listener to the button that listens for a 'click' event
+            changeTextButton.addEventListener('click', () => {
+                // 1. Change the text content of the greeting element
+                greetingTextElement.textContent = 'Hello, Azeem!';
+
+                // 2. Add a CSS class to the greeting element
+                // This class will trigger the color and transform transitions defined in CSS,
+                // providing a smooth visual change.
+                greetingTextElement.classList.add('text-changed');
+
+                // Optional: Disable the button after click if it's a one-time change
+                // changeTextButton.disabled = true;
+                // changeTextButton.textContent = "Text Changed!";
+                // changeTextButton.style.backgroundColor = '#6c757d'; // Grey out button
+                // changeTextButton.style.cursor = 'not-allowed';
+            });
+        });
+    </script>
 </body>
 </html>
